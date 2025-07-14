@@ -1,22 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:wellness/login_screen.dart';
-import 'package:wellness/topic_selector.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:wellness/core/route_config/route_name.dart';
+import 'package:wellness/features/topic_selector/topic_selector.dart';
+import 'package:wellness/features/auth/register_screen.dart';
+import 'package:wellness/service/auth_service.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final _registerFormKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+
+  final _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final emailRegex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-  final passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
   bool _hidePass = true;
   bool _rememberMeCheck = true;
 
@@ -26,59 +29,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           child: SizedBox(
             width: double.infinity,
             child: Column(
-              spacing: 20,
+              spacing: 20.h,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 30),
+                  margin: EdgeInsets.only(bottom: 30.h),
                   child: Text(
-                    'Start your wellness journey today.',
-                    textAlign: TextAlign.left,
+                    'Welcome back!',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        fontSize: 32
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontSize: 32.sp
                     ),
         
                   ),
                 ),
         
                 Form(
-                  key: _registerFormKey,
+                  key: _loginFormKey,
                   child: Column(
-                    spacing: 20,
+                    spacing: 20.h,
                     children: [
-                      TextFormField(
-                        controller: _nameController,
-                        validator: (String? value) {
-                          if((value??'').isEmpty){
-                            return "Name is required";
-                          }
-                          return null;
-                        },
-                        style: TextStyle(
-                            fontSize: 20
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Enter your name",
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.all(12), // Adjust to control icon size and position
-                            child: SvgPicture.asset(
-                              'assets/icons/user.svg',
-                              fit: BoxFit.scaleDown,
-                              height: 24,
-                              width: 24,
-                              colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
-                            ),
-                          ),
-                        ),
-                      ),
-        
                       TextFormField(
                         controller: _emailController,
                         validator: (String? value) {
@@ -91,17 +68,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                         style: TextStyle(
-                            fontSize: 20
+                          fontSize: 20.sp
                         ),
                         decoration: InputDecoration(
                           hintText: "Enter your email",
                           prefixIcon: Padding(
-                            padding: EdgeInsets.all(12), // Adjust to control icon size and position
+                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h), // Adjust to control icon size and position
                             child: SvgPicture.asset(
                               'assets/icons/mail.svg',
                               fit: BoxFit.scaleDown,
-                              height: 24,
-                              width: 24,
+                              height: 24.h,
+                              width: 24.w,
                               colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
                             ),
                           ),
@@ -109,57 +86,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
         
                       TextFormField(
-                          obscureText: _hidePass,
-                          controller: _passwordController,
-                          validator: (String? value) {
-                            if((value??'').isEmpty){
-                              return "Password is required.";
-                            }
-                            else if((value??'').length < 8) {
-                              return "Password must be at least 8 characters long.";
-                            }
-                            else if(!passwordRegex.hasMatch(value??'')){
-                              return "Invalid Password. Must be at least 1 Uppercase, 1 Lowercase, 1 Symbol, 1 Number.";
-                            }
-                            return null;
-                          },
-                          style: TextStyle(
-                              fontSize: 20
+                        obscureText: _hidePass,
+                        controller: _passwordController,
+                        validator: (String? value) {
+                          if((value??'').isEmpty){
+                            return "Password is required.";
+                          }
+                          else if((value??'').length < 8) {
+                            return "Password must be at least 8 characters long.";
+                          }
+
+                          return null;
+                        },
+                        style: TextStyle(
+                          fontSize: 20.sp
+                        ),
+                        decoration: InputDecoration(
+                          hintText: "Enter your password",
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                            child: SvgPicture.asset(
+                              'assets/icons/lock.svg',
+                              height: 24.h,
+                              width: 24.w,
+                              fit: BoxFit.scaleDown,
+                              colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                            ),
                           ),
-                          decoration: InputDecoration(
-                              hintText: "Enter your password",
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.all(12),
-                                child: SvgPicture.asset(
-                                  'assets/icons/lock.svg',
-                                  height: 24,
-                                  width: 24,
+        
+                          suffixIcon: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                              child: IconButton(
+                                icon: SvgPicture.asset(
+                                  _hidePass ? 'assets/icons/eye_off.svg' : 'assets/icons/eye.svg',
+                                  height: 24.h,
+                                  width: 24.w,
                                   fit: BoxFit.scaleDown,
                                   colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
                                 ),
-                              ),
-        
-                              suffixIcon: Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: IconButton(
-                                    icon: SvgPicture.asset(
-                                      _hidePass ? 'assets/icons/eye_off.svg' : 'assets/icons/eye.svg',
-                                      height: 24,
-                                      width: 24,
-                                      fit: BoxFit.scaleDown,
-                                      colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _hidePass = !_hidePass;
-                                      });
-                                    },
-                                  )
+                                onPressed: () {
+                                  setState(() {
+                                    _hidePass = !_hidePass;
+                                  });
+                                },
                               )
                           )
+                        )
                       ),
         
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
@@ -176,49 +152,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Text(
                                 'Remember Me',
                                 style: TextStyle(
-                                    fontSize: 18
+                                  fontSize: 18.sp
                                 ),
                               )
                             ],
                           ),
+        
+                          Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                                fontSize: 18.sp
+                            ),
+                          )
                         ],
                       ),
         
                       Column(
-                        spacing: 16,
+                        spacing: 16.h,
                         children: [
                           SizedBox(
                             width: double.infinity,
                             child: TextButton(
                               onPressed: () {
-                                if(
-                                  _registerFormKey.currentState != null &&
-                                  _registerFormKey.currentState!.validate()
+                                if (
+                                  _loginFormKey.currentState != null &&
+                                  _loginFormKey.currentState!.validate()
                                 ) {
-                                  _registerFormKey.currentState!.save();
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (ctx) {
-                                            return LoginScreen();
-                                          }
-                                      )
-                                  );
+                                  _loginFormKey.currentState!.save();
+
+                                  Navigator.of(context).pushNamed( RouteName.topicSelect );
                                 }
                               },
         
                               style: TextButton.styleFrom(
-                                backgroundColor: Colors.white,      // Button color
-                                padding: EdgeInsets.symmetric(vertical: 16), // Button height
+                                backgroundColor: Colors.grey[900],      // Button color
+                                padding: EdgeInsets.symmetric(vertical: 16.h), // Button height
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),  // Rounded corners
+                                  borderRadius: BorderRadius.circular(12.r),  // Rounded corners
                                 ),
                               ),
         
                               child: Text(
-                                'Sign Up',
+                                'Login',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
         
@@ -228,31 +207,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Text(
                               'Or',
                               style: TextStyle(
-                                  fontSize: 18
+                                  fontSize: 18.sp
                               )
                           ),
         
                           SizedBox(
                             width: double.infinity,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () async{
+                                Navigator.of(context).pushNamed(
+                                    (RouteName.adminDashboard)
+                                );
+                                // UserCredential? user = await AuthService().signInWithGoogle();
+                                //
+                                // if (user != null) {
+                                //   //register is successful
+                                //   Navigator.of(context).pushNamed(
+                                //       (RouteName.adminDashboard)
+                                //   );
+                                // }
+                              },
         
                               style: TextButton.styleFrom(
                                 backgroundColor: Colors.grey[900],      // Button color
-                                padding: EdgeInsets.symmetric(vertical: 16), // Button height
+                                padding: EdgeInsets.symmetric(vertical: 16.h), // Button height
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),  // Rounded corners
+                                  borderRadius: BorderRadius.circular(12.r),  // Rounded corners
                                 ),
                               ),
         
                               child: Row(
-                                  spacing: 16,
+                                  spacing: 16.w,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
                                       'assets/icons/google.svg',
-                                      height: 24,
-                                      width: 24,
+                                      height: 24.h,
+                                      width: 24.w,
                                       fit: BoxFit.scaleDown,
                                       colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
                                     ),
@@ -260,7 +251,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       'Google',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18,
+                                        fontSize: 18.sp,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     )
@@ -281,27 +272,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Already have an account?",
+                        "Don't have an account?",
                         style: TextStyle(
-                            fontSize: 16
+                          fontSize: 16.sp
                         ),
                       ),
         
                       TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (ctx) {
-                                      return LoginScreen();
-                                    }
-                                )
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (ctx) {
+                                    return RegisterScreen();
+                                  }
+                              )
                             );
                           },
         
                           child: Text(
-                            "Login",
+                            "Create an account",
                             style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 color: Colors.white
                             ),
                           )
@@ -313,7 +304,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           )
         ),
-      )
+      ),
     );
   }
 }
+
+

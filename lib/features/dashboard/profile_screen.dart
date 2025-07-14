@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:wellness/login_screen.dart';
+import 'package:wellness/features/auth/login_screen.dart';
 import 'package:wellness/models/category.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -14,7 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   List<Category> menuCategories = [
     Category("Theme", "assets/icons/pen.svg"),
-    Category("Forgot Password", "assets/icons/password_elipsis.svg"),
+    Category("Change Password", "assets/icons/password_elipsis.svg"),
     Category("Logout", "assets/icons/logout.svg",
       onClick: (ctx) {
         Navigator.of(ctx).pushReplacement(

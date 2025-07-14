@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:wellness/profile_screen.dart';
+import 'package:wellness/features/dashboard/profile_screen.dart';
 import 'package:wellness/quotes_screen.dart';
 import 'package:wellness/models/category.dart';
 

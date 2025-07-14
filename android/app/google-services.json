@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "458052632899",
+    "project_id": "wellness-3c0c9",
+    "storage_bucket": "wellness-3c0c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458052632899:android:b8622a68e4e8b53cc7aff6",
+        "android_client_info": {
+          "package_name": "com.wellness.wellness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458052632899-d78bem1bgtg7sk5eqjj9vaii92cr0asa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wellness.wellness",
+            "certificate_hash": "09ce509b543c58ccc68004639958672c57b19be0"
+          }
+        },
+        {
+          "client_id": "458052632899-gd9lte50rc31joeilhajmgsfug80fpu3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFabMwmyGPGm8zYyL6KmtdAmv7szRssV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458052632899-gd9lte50rc31joeilhajmgsfug80fpu3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
