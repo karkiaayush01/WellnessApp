@@ -31,12 +31,8 @@ class AuthService {
     try {
       UserCredential? userCredential =  await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email, password: password);
-      if(userCredential) {
-        await userCredential.user!.updateDisplayName(name);
-        return userCredential;
-      } else {
-        return null;
-      }
+      await userCredential.user!.updateDisplayName(name);
+      return userCredential;
     } catch (error) {
       log("Creating user with email and pass error: ${error.toString()}");
       return null;
