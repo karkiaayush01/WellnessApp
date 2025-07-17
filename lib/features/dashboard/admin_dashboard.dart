@@ -38,6 +38,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ),
           ),
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(RouteName.profileScreen);
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Image.network(
+                    'https://image.lexica.art/full_jpg/8f87cbeb-233e-42b7-9822-241444d591b1',
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover
+                ),
+              ),
+            )
+          ],
         ),
       body: SafeArea(
         child: Padding(

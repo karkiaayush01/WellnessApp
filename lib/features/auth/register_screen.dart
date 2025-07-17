@@ -249,13 +249,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onPressed: () async {
                                   String email = _emailController.text;
                                   String password = _passwordController.text;
+                                  String name = _nameController.text;
                                   if(
                                     _registerFormKey.currentState != null &&
                                     _registerFormKey.currentState!.validate()
                                   ) {
                                     _registerFormKey.currentState!.save();
 
-                                    UserCredential? user = await AuthService().signUpWithEmailAndPass(email, password);
+                                    UserCredential? user = await AuthService().signUpWithEmailAndPass(email, password,name);
                                     if(user != null) {
                                       Navigator.pushNamed(context, RouteName.dashboardScreen);
                                     }

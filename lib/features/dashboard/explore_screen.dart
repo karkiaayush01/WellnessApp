@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:wellness/core/route_config/route_name.dart';
 import 'package:wellness/features/dashboard/profile_screen.dart';
 import 'package:wellness/quotes_screen.dart';
 import 'package:wellness/models/category.dart';
@@ -68,13 +69,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (ctx) {
-                      return ProfileScreen();
-                    }
-                )
-              );
+              Navigator.of(context).pushNamed(RouteName.profileScreen);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30),

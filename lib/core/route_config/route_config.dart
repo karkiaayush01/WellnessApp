@@ -3,9 +3,12 @@ import 'package:wellness/core/route_config/route_name.dart';
 import 'package:wellness/features/add_items/add_category.dart';
 import 'package:wellness/features/add_items/add_health_tips.dart';
 import 'package:wellness/features/add_items/add_quote.dart';
+import 'package:wellness/features/auth/change_password.dart';
+import 'package:wellness/features/auth/forgot_password.dart';
 import 'package:wellness/features/dashboard/admin_dashboard.dart';
 import 'package:wellness/features/dashboard/explore_screen.dart';
 import 'package:wellness/features/auth/login_screen.dart';
+import 'package:wellness/features/dashboard/profile_screen.dart';
 import 'package:wellness/features/topic_selector/topic_selector.dart';
 import 'package:wellness/product/product_screen.dart';
 
@@ -46,6 +49,18 @@ class RouteConfig {
       case RouteName.addHealthTips:
         return MaterialPageRoute(
           builder: (_) => AddHealthTips()
+        );
+      case RouteName.forgotPassword:
+        return MaterialPageRoute(
+          builder: (_) => ForgotPassword()
+        );
+      case RouteName.changePassword:
+        return MaterialPageRoute(
+          builder: (_) => ChangePassword()
+        );
+      case RouteName.profileScreen:
+        return MaterialPageRoute(
+          builder: (_) => ProfileScreen()
         );
       case RouteName.defaultScreen:
       default:

@@ -11,4 +11,7 @@ class RouteName {
   static const String addCategory = '/add-category';
   static const String addQuote = '/add-quote';
   static const String addHealthTips = '/add-health-tips';
+  static const String forgotPassword = '/forgot-password';
+  static const String changePassword = '/change-password';
+  static const String profileScreen = '/profile-screen';
 }

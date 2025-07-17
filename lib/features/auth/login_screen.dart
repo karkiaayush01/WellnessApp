@@ -5,7 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wellness/core/route_config/route_name.dart';
 import 'package:wellness/features/topic_selector/topic_selector.dart';
 import 'package:wellness/features/auth/register_screen.dart';
+import 'package:wellness/popup.dart';
 import 'package:wellness/service/auth_service.dart';
+import 'dart:developer';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                         style: TextStyle(
-                          fontSize: 20.sp
+                          fontSize: 18.sp
                         ),
                         decoration: InputDecoration(
                           hintText: "Enter your email",
@@ -99,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                         style: TextStyle(
-                          fontSize: 20.sp
+                          fontSize: 18.sp
                         ),
                         decoration: InputDecoration(
                           hintText: "Enter your password",
@@ -152,16 +154,22 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 'Remember Me',
                                 style: TextStyle(
-                                  fontSize: 18.sp
+                                  fontSize: 16.sp
                                 ),
                               )
                             ],
                           ),
         
-                          Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                                fontSize: 18.sp
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(RouteName.forgotPassword);
+                            },
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: Colors.white
+                              ),
                             ),
                           )
                         ],
@@ -173,14 +181,32 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: TextButton(
-                              onPressed: () {
+                              onPressed: () async{
                                 if (
                                   _loginFormKey.currentState != null &&
                                   _loginFormKey.currentState!.validate()
                                 ) {
                                   _loginFormKey.currentState!.save();
+                                  String email = _emailController.text;
+                                  String password = _passwordController.text;
 
-                                  Navigator.of(context).pushNamed( RouteName.topicSelect );
+                                  String? loginMessage = await AuthService().signInWithEmailAndPass(email, password)??'';
+
+                                  if(loginMessage.startsWith("Success: ")){
+                                    log("logged in with email: $email");
+                                    if(email == "admin@wellness.com"){
+                                      Navigator.of(context).pushReplacementNamed(RouteName.adminDashboard);
+                                    }
+                                    else {
+                                      Navigator.of(context).pushReplacementNamed(RouteName.topicSelect);
+                                    }
+                                  }
+                                  else {
+                                    if(loginMessage.startsWith("Error")){
+                                      String message = loginMessage.split("Error: ")[1];
+                                      Popup.show(context, message, type: PopupType.error);
+                                    }
+                                  }
                                 }
                               },
         
@@ -215,17 +241,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: double.infinity,
                             child: TextButton(
                               onPressed: () async{
-                                Navigator.of(context).pushNamed(
-                                    (RouteName.adminDashboard)
-                                );
-                                // UserCredential? user = await AuthService().signInWithGoogle();
-                                //
-                                // if (user != null) {
-                                //   //register is successful
-                                //   Navigator.of(context).pushNamed(
-                                //       (RouteName.adminDashboard)
-                                //   );
-                                // }
+                                UserCredential? user = await AuthService().signInWithGoogle();
+                                if (user != null) {
+                                  //register is successful
+                                  Navigator.of(context).pushNamed(
+                                      (RouteName.topicSelect)
+                                  );
+                                }
                               },
         
                               style: TextButton.styleFrom(
@@ -274,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         "Don't have an account?",
                         style: TextStyle(
-                          fontSize: 16.sp
+                          fontSize: 14.sp
                         ),
                       ),
         
@@ -292,7 +314,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             "Create an account",
                             style: TextStyle(
-                                fontSize: 16.sp,
+                                fontSize: 14.sp,
                                 color: Colors.white
                             ),
                           )

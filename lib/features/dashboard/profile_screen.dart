@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:wellness/core/route_config/route_name.dart';
 import 'package:wellness/features/auth/login_screen.dart';
 import 'package:wellness/models/category.dart';
+import 'package:wellness/popup.dart';
+import 'package:wellness/service/auth_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -12,18 +15,30 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
+  final String displayName = AuthService().getDisplayName();
+  final String userEmail = AuthService().getUserEmail();
+
   List<Category> menuCategories = [
     Category("Theme", "assets/icons/pen.svg"),
-    Category("Change Password", "assets/icons/password_elipsis.svg"),
-    Category("Logout", "assets/icons/logout.svg",
-      onClick: (ctx) {
-        Navigator.of(ctx).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) {
-              return LoginScreen();
-            }
-          )
+    Category("Change Password", "assets/icons/password_elipsis.svg",
+      onClick: (context) {
+        Navigator.of(context).pushNamed(
+          RouteName.changePassword
         );
+      }
+    ),
+    Category("Logout", "assets/icons/logout.svg",
+      onClick: (ctx) async {
+        String? signOutResult = await AuthService().signOut()??"";
+        if(signOutResult.startsWith("Success:")){
+          Navigator.of(ctx).pushNamed(RouteName.loginScreen);
+        }
+        else {
+          if(signOutResult.startsWith("Error:")){
+            String popupMessage = signOutResult.split("Error: ")[0];
+            Popup.show(ctx, popupMessage, type: PopupType.error );
+          }
+        }
       }
     )
   ];
@@ -83,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         spacing: 6,
                         children: [
                           Text(
-                            'John Doe',
+                            displayName,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
@@ -92,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
 
                           Text(
-                            'john.doe@example.com',
+                            userEmail,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.white54
